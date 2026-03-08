@@ -4,7 +4,7 @@
 
 ## Description
 
-**Countdown** is an environment for evaluating agents on the Countdown Numbers game, where agents must reach a target number by combining available numbers with arithmetic operations. This environment wraps the Countdown implementation from [TextArena](https://github.com/LeonGuertler/TextArena), a framework for text-based game environments.
+**Countdown** is an ORS environment for evaluating agents on the Countdown Numbers game, where agents must reach a target number by combining available numbers with arithmetic operations. This environment wraps the Countdown implementation from [TextArena](https://github.com/LeonGuertler/TextArena), a framework for text-based game environments.
 
 ## Capabilities
 
