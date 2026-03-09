@@ -62,7 +62,7 @@ class CountdownEnvironment(Environment):
     async def get_prompt(self) -> List[TextBlock]:
         self.ta_env.reset(num_players=1, seed=self.config.seed)
         _, obs = self.ta_env.get_observation()
-        obs_text = obs if isinstance(obs, str) else str(obs)
+        obs_text = obs if isinstance(obs, str) else (str(obs[-1][1]) if isinstance(obs, list) and obs and isinstance(obs[-1], tuple) and len(obs[-1]) >= 2 else str(obs))
 
         prompt = f"""You are playing Countdown Numbers.
 
@@ -115,7 +115,7 @@ The result replaces both numbers in the list. Reach the target number!"""
 
         # Game continues
         _, obs = self.ta_env.get_observation()
-        obs_text = obs if isinstance(obs, str) else str(obs)
+        obs_text = obs if isinstance(obs, str) else (str(obs[-1][1]) if isinstance(obs, list) and obs and isinstance(obs[-1], tuple) and len(obs[-1]) >= 2 else str(obs))
 
         return ToolOutput(
             blocks=[TextBlock(text=obs_text)],
