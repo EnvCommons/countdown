@@ -73,10 +73,6 @@ class CountdownEnvironment(Environment):
             return str(last)
         return str(observation)
 
-    def _map_reward(self, raw: float) -> float:
-        """Map raw reward from [-1, 1] to [0, 1]"""
-        return max(0.0, min(1.0, (raw + 1.0) / 2.0))
-
     async def get_prompt(self) -> List[TextBlock]:
         self.ta_env.reset(num_players=1, seed=self.config.seed)
         _, obs = self.ta_env.get_observation()
@@ -111,9 +107,12 @@ The result replaces both numbers in the list. Reach the target number!"""
             self.game_done = True
             rewards, game_info = self.ta_env.close()
 
-            # Extract reward for player 0
-            raw = rewards.get(0, 0.0) if isinstance(rewards, dict) else float(rewards)
-            reward = self._map_reward(raw)
+            # Extract reward for player 0. TextArena's Countdown reward is already
+            # in [0, 1] (win = 1.0; every other terminal outcome = the continuous
+            # progress score 1 - distance/1000), so pass it through unchanged. The
+            # old (raw + 1) / 2 map floored non-wins at ~0.784 (progress 0.568) and
+            # never produced a value below 0.5.
+            reward = rewards.get(0, 0.0) if isinstance(rewards, dict) else float(rewards)
 
             # Extract reason from game_info
             reason = ""

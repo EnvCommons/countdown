@@ -17,7 +17,7 @@ There are two splits: train (150 tasks) and test (150 tasks). Each split contain
 - **Countdown-v0-raw**: Raw feedback without formatting
 Each task is seeded for reproducibility.
 ## Reward Structure
-This is a sparse reward environment. Rewards are mapped from TextArena's native range of {-1, 0, 1} to {0.0, 0.5, 1.0} via `(raw + 1) / 2`.
+This is a sparse reward environment. TextArena's Countdown reward is already in `[0.0, 1.0]` and is passed through unchanged: reaching the target scores `1.0`, and every other terminal outcome (no legal moves remaining or turn limit) scores a continuous progress value (`1 - distance/1000`, where `distance` is how far the closest value reached is from the target). Intermediate moves score `0.0`.
 We do not use LLM graders for this environment; reward is determined programmatically.
 ## Data
 Game state is generated procedurally by the TextArena engine using seeded randomness. No external data files are required.
